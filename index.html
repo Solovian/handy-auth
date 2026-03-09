@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Handy — Вход</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --brand:      #FA6120;
+  --brand-d:    #d94e10;
+  --brand-h:    rgba(250,97,32,.1);
+  --brand-ring: rgba(250,97,32,.22);
+
+  --bg:  #f5f4f1;
+  --sur: #ffffff;
+  --bdr: rgba(0,0,0,.07);
+  --bdr2:rgba(0,0,0,.12);
+
+  --t1: #0f0e0c;
+  --t2: #4a4845;
+  --t3: #8f8d88;
+  --t4: #c2c0bb;
+
+  --red:    #dc2626;
+  --red-bg: #fef2f2;
+  --red-bdr:#fecaca;
+
+  --r:    8px;
+  --font: 'Geist', -apple-system, sans-serif;
+  --mono: 'Geist Mono', monospace;
+}
+
+html { height: 100%; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--t1);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── LAYOUT ── */
+.page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px 40px;
+  gap: 0;
+}
+
+/* ── LOGO ── */
+.logo-block {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 32px;
+  text-decoration: none;
+}
+.logo-mark {
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  background: var(--t1);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.logo-mark span {
+  font-family: var(--mono);
+  font-size: 16px; font-weight: 700;
+  color: var(--brand);
+  letter-spacing: -1px;
+}
+.logo-name {
+  font-size: 18px; font-weight: 700;
+  letter-spacing: -.4px;
+  color: var(--t1);
+}
+
+/* ── CARD ── */
+.card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--sur);
+  border: 1px solid var(--bdr);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* ── TABS ── */
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--bdr);
+}
+.tab {
+  padding: 14px 0;
+  text-align: center;
+  font-size: 13px; font-weight: 600;
+  color: var(--t3);
+  cursor: pointer;
+  border: none; background: none;
+  font-family: var(--font);
+  transition: color .12s;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.tab:hover { color: var(--t2); }
+.tab.active {
+  color: var(--t1);
+  border-bottom-color: var(--brand);
+}
+
+/* ── PANELS ── */
+.panel { display: none; padding: 24px; }
+.panel.active { display: block; }
+
+/* ── FORM ── */
+.form { display: flex; flex-direction: column; gap: 14px; }
+
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label {
+  font-size: 12px; font-weight: 600;
+  color: var(--t2);
+}
+.field input {
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--bdr2);
+  border-radius: var(--r);
+  background: var(--bg);
+  font-family: var(--font);
+  font-size: 13px; color: var(--t1);
+  outline: none;
+  transition: border-color .12s, box-shadow .12s, background .12s;
+}
+.field input::placeholder { color: var(--t4); }
+.field input:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand-ring);
+  background: var(--sur);
+}
+.field input.error {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(220,38,38,.12);
+}
+.field-error {
+  font-size: 11px; color: var(--red);
+  display: none;
+}
+.field-error.show { display: block; }
+
+/* Password wrapper */
+.pwd-wrap { position: relative; }
+.pwd-wrap input { padding-right: 40px; width: 100%; }
+.pwd-toggle {
+  position: absolute; right: 0; top: 0;
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--t4);
+  background: none; border: none;
+  transition: color .12s;
+}
+.pwd-toggle:hover { color: var(--t2); }
+
+/* INN hint */
+.field-hint {
+  font-size: 11px; color: var(--t3);
+}
+
+/* ── SUBMIT ── */
+.btn-submit {
+  width: 100%;
+  height: 42px;
+  background: var(--brand);
+  color: #fff;
+  border: none; border-radius: var(--r);
+  font-family: var(--font);
+  font-size: 14px; font-weight: 600;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background .12s, transform .12s, box-shadow .12s;
+  box-shadow: 0 2px 8px var(--brand-ring);
+}
+.btn-submit:hover {
+  background: var(--brand-d);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px var(--brand-ring);
+}
+.btn-submit:active { transform: none; }
+.btn-submit:disabled {
+  opacity: .5; cursor: not-allowed; transform: none;
+  box-shadow: none;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 11px; color: var(--t4); margin: 4px 0;
+}
+.divider::before,
+.divider::after {
+  content: ''; flex: 1;
+  height: 1px; background: var(--bdr);
+}
+
+/* ── AGREE ── */
+.agree {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 12px; color: var(--t3);
+  cursor: pointer;
+  user-select: none;
+}
+.agree input[type=checkbox] {
+  width: 15px; height: 15px;
+  margin-top: 1px; flex-shrink: 0;
+  accent-color: var(--brand);
+  cursor: pointer;
+}
+.agree a { color: var(--brand); text-decoration: none; }
+.agree a:hover { text-decoration: underline; }
+
+/* ── FORGOT ── */
+.forgot {
+  text-align: right;
+  font-size: 12px;
+}
+.forgot a {
+  color: var(--t3); text-decoration: none;
+  transition: color .12s;
+}
+.forgot a:hover { color: var(--brand); }
+
+/* ── FOOTER ── */
+.auth-footer {
+  margin-top: 20px;
+  font-size: 12px; color: var(--t3);
+  text-align: center;
+}
+
+/* ── SUCCESS STATE ── */
+.success-block {
+  display: none;
+  flex-direction: column; align-items: center;
+  gap: 12px; padding: 32px 24px;
+  text-align: center;
+}
+.success-block.show { display: flex; }
+.success-ico {
+  width: 44px; height: 44px; border-radius: 12px;
+  background: #f0fdf4; border: 1px solid #bbf7d0;
+  display: flex; align-items: center; justify-content: center;
+}
+.success-ico svg { color: #15803d; }
+.success-block h3 { font-size: 16px; font-weight: 700; }
+.success-block p  { font-size: 13px; color: var(--t3); line-height: 1.5; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 20px; left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: var(--t1); color: #fff;
+  border-radius: var(--r); padding: 9px 16px;
+  font-size: 13px; font-weight: 500;
+  box-shadow: 0 4px 20px rgba(0,0,0,.18);
+  opacity: 0; transition: all .2s;
+  pointer-events: none; white-space: nowrap; z-index: 999;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── PAGE FOOTER ── */
+footer {
+  padding: 16px;
+  text-align: center;
+  font-size: 11px; color: var(--t4);
+  font-family: var(--mono);
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Logo -->
+  <a class="logo-block" href="#">
+    <div class="logo-mark"><span>H</span></div>
+    <span class="logo-name">Handy</span>
+  </a>
+
+  <!-- Auth card -->
+  <div class="card">
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" id="tabLogin" onclick="switchTab('login')">Вход</button>
+      <button class="tab"        id="tabReg"   onclick="switchTab('reg')">Регистрация</button>
+    </div>
+
+    <!-- ═══ LOGIN PANEL ═══ -->
+    <div class="panel active" id="panelLogin">
+      <form class="form" id="loginForm" onsubmit="submitLogin(event)">
+
+        <div class="field">
+          <label for="loginEmail">Email</label>
+          <input id="loginEmail" type="email" placeholder="name@company.ru" autocomplete="email">
+          <span class="field-error" id="loginEmailErr">Введите корректный email</span>
+        </div>
+
+        <div class="field">
+          <label for="loginPwd">Пароль</label>
+          <div class="pwd-wrap">
+            <input id="loginPwd" type="password" placeholder="••••••••" autocomplete="current-password">
+            <button type="button" class="pwd-toggle" onclick="togglePwd('loginPwd', this)" tabindex="-1">
+              <svg id="eyeLogin" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <span class="field-error" id="loginPwdErr">Введите пароль</span>
+        </div>
+
+        <div class="forgot"><a href="#">Забыли пароль?</a></div>
+
+        <button type="submit" class="btn-submit" id="loginBtn">Войти</button>
+
+      </form>
+    </div>
+
+    <!-- ═══ REGISTER PANEL ═══ -->
+    <div class="panel" id="panelReg">
+
+      <!-- Form -->
+      <form class="form" id="regForm" onsubmit="submitReg(event)">
+
+
+<div class="field">
+          <label for="regEmail">Email</label>
+          <input id="regEmail" type="email" placeholder="name@company.ru" autocomplete="email">
+          <span class="field-error" id="regEmailErr">Введите корректный email</span>
+        </div>
+
+        <div class="field">
+          <label for="regPhone">Телефон</label>
+          <input id="regPhone" type="tel" placeholder="+7 900 000-00-00" autocomplete="tel">
+          <span class="field-error" id="regPhoneErr">Введите номер телефона</span>
+        </div>
+
+        <div class="field">
+          <label for="regPwd">Пароль</label>
+          <div class="pwd-wrap">
+            <input id="regPwd" type="password" placeholder="Минимум 8 символов" autocomplete="new-password" oninput="checkPwd()">
+            <button type="button" class="pwd-toggle" onclick="togglePwd('regPwd', this)" tabindex="-1">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <span class="field-error" id="regPwdErr">Минимум 8 символов</span>
+        </div>
+
+        <!-- Password strength -->
+        <div id="pwdStrengthWrap" style="display:none;gap:4px;flex-direction:column">
+          <div style="display:flex;gap:4px">
+            <div class="ps-bar" id="ps1"></div>
+            <div class="ps-bar" id="ps2"></div>
+            <div class="ps-bar" id="ps3"></div>
+            <div class="ps-bar" id="ps4"></div>
+          </div>
+          <span id="pwdStrengthLabel" style="font-size:11px;color:var(--t3)"></span>
+        </div>
+
+        <label class="agree">
+          <input type="checkbox" id="regAgree">
+          <span>Согласен с <a href="#">условиями использования</a> и <a href="#">политикой конфиденциальности</a></span>
+        </label>
+        <span class="field-error" id="regAgreeErr">Необходимо принять условия</span>
+
+        <button type="submit" class="btn-submit" id="regBtn">Зарегистрироваться</button>
+
+      </form>
+
+      <!-- Success -->
+      <div class="success-block" id="regSuccess">
+        <div class="success-ico">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h3>Заявка отправлена</h3>
+        <p>Мы отправили письмо с подтверждением на ваш email. Проверьте входящие.</p>
+        <button class="btn-submit" style="max-width:200px;margin-top:4px" onclick="switchTab('login')">Войти</button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="auth-footer">Электронный документооборот · ГИС ЭПД</div>
+
+</div>
+
+<footer>© 2026 Handy · v1.0</footer>
+
+<div class="toast" id="toastEl"></div>
+
+<style>
+/* password strength bars */
+.ps-bar {
+  flex: 1; height: 3px; border-radius: 2px;
+  background: var(--bdr2); transition: background .2s;
+}
+.ps-bar.s1 { background: var(--red); }
+.ps-bar.s2 { background: #f59e0b; }
+.ps-bar.s3 { background: #84cc16; }
+.ps-bar.s4 { background: #15803d; }
+</style>
+
+<script>
+// ── TABS ──────────────────────────────────────────────────────────────────────
+function switchTab(t) {
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab' + (t === 'login' ? 'Login' : 'Reg')).classList.add('active');
+  document.getElementById('panel' + (t === 'login' ? 'Login' : 'Reg')).classList.add('active');
+}
+
+// ── PASSWORD TOGGLE ───────────────────────────────────────────────────────────
+function togglePwd(id, btn) {
+  const input = document.getElementById(id);
+  const show = input.type === 'password';
+  input.type = show ? 'text' : 'password';
+  btn.innerHTML = show
+    ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`
+    : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+}
+
+// ── PASSWORD STRENGTH ─────────────────────────────────────────────────────────
+function checkPwd() {
+  const v = document.getElementById('regPwd').value;
+  const wrap = document.getElementById('pwdStrengthWrap');
+  const label = document.getElementById('pwdStrengthLabel');
+  const bars = [1,2,3,4].map(i => document.getElementById('ps' + i));
+
+  if (!v) { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'flex';
+
+  let score = 0;
+  if (v.length >= 8)  score++;
+  if (/[A-Z]/.test(v)) score++;
+  if (/[0-9]/.test(v)) score++;
+  if (/[^A-Za-z0-9]/.test(v)) score++;
+
+  const labels = ['', 'Слабый', 'Средний', 'Хороший', 'Надёжный'];
+  const cls    = ['', 's1', 's2', 's3', 's4'];
+
+  bars.forEach((b, i) => {
+    b.className = 'ps-bar';
+    if (i < score) b.classList.add(cls[score]);
+  });
+  label.textContent = labels[score] || '';
+}
+
+// ── VALIDATION ────────────────────────────────────────────────────────────────
+function showErr(id, show) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle('show', show);
+  const input = el.previousElementSibling?.tagName === 'INPUT'
+    ? el.previousElementSibling
+    : el.closest('.field')?.querySelector('input');
+  if (input) input.classList.toggle('error', show);
+}
+
+function validateLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pwd = document.getElementById('loginPwd').value;
+  let ok = true;
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  showErr('loginEmailErr', !emailOk); if (!emailOk) ok = false;
+  if (!pwd) { showErr('loginPwdErr', true); ok = false; } else showErr('loginPwdErr', false);
+  return ok;
+}
+
+function validateReg() {
+  const email = document.getElementById('regEmail').value.trim();
+  const phone = document.getElementById('regPhone').value.trim();
+  const pwd   = document.getElementById('regPwd').value;
+  const agree = document.getElementById('regAgree').checked;
+  let ok = true;
+
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  showErr('regEmailErr', !emailOk); if (!emailOk) ok = false;
+
+  const phoneOk = phone.replace(/\D/g,'').length >= 10;
+  showErr('regPhoneErr', !phoneOk); if (!phoneOk) ok = false;
+
+  const pwdOk = pwd.length >= 8;
+  showErr('regPwdErr',   !pwdOk);   if (!pwdOk)  ok = false;
+
+  showErr('regAgreeErr', !agree);   if (!agree)  ok = false;
+
+  return ok;
+}
+
+// ── SUBMIT ────────────────────────────────────────────────────────────────────
+function submitLogin(e) {
+  e.preventDefault();
+  if (!validateLogin()) return;
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true;
+  btn.textContent = 'Входим…';
+  setTimeout(() => {
+    btn.disabled = false;
+    btn.textContent = 'Войти';
+    toast('Добро пожаловать в Handy');
+    setTimeout(() => window.location.href = 'etrn-list.html', 900);
+  }, 1200);
+}
+
+function submitReg(e) {
+  e.preventDefault();
+  if (!validateReg()) return;
+  const btn = document.getElementById('regBtn');
+  btn.disabled = true;
+  btn.textContent = 'Отправляем…';
+  setTimeout(() => {
+    document.getElementById('regForm').style.display = 'none';
+    document.getElementById('regSuccess').classList.add('show');
+  }, 1100);
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+let tTimer;
+function toast(msg) {
+  const el = document.getElementById('toastEl');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(tTimer);
+  tTimer = setTimeout(() => el.classList.remove('show'), 2600);
+}
+</script>
+</body>
+</html>
